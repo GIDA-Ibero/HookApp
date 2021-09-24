@@ -1,21 +1,21 @@
-import React, { useReducer } from 'react'
+import React, { useReducer, useEffect } from 'react'
 import { TodoAdd } from './TodoAdd';
 import { TodoList } from './TodoList';
 import { todoReducer } from './todoReducer';
 
 import './styles.css';
 
-const initTodo = [
-  {
-    id: new Date().getTime(),
-    desc: 'Aprender React',
-    done: false
-  }
-];
+const init = () => {
+  return JSON.parse( localStorage.getItem('todos') ) || [];
+}
 
 export const TodoApp = () => {
-  const [todos, dispatch] = useReducer(todoReducer, initTodo);
+  const [todos, dispatch] = useReducer(todoReducer, [], init);
   
+  useEffect(() => {
+    localStorage.setItem( 'todos', JSON.stringify(todos) );
+  }, [todos])
+
   const handleDelete = (todoId) => {
     const action = {
       type: 'delete',
